@@ -132,5 +132,5 @@ class WordFilterRule(BaseRule):
 
         for word in all_words:
             channels = word["channel"]
-            if message.channel.id in channels or channels is None:
+            if (message.channel.id in channels) or (not channels):
                 return await self.is_filtered(sentence, all_words)

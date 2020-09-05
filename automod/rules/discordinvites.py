@@ -69,7 +69,7 @@ class DiscordInviteRule(BaseRule, ABC):
         else:
             filter_content = content.split()
 
-        has_offensive = list(filter(r.match, filter_content,))
+        has_offensive = list(filter(r.search, filter_content,))
 
         if has_offensive:
             return True
