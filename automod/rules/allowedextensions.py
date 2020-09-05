@@ -199,27 +199,29 @@ class AllowedExtensionsRule(BaseRule):
 
         # Blacklist takes precedent
         blacklist_extensions = await self.get_blacklist_extensions(guild)
-        for entry in blacklist_extensions:
-            if channel.id in entry.channels or entry.channels is None:
-                blacklisted_extension = await self.is_blacklist(
-                    message_attachment_extensions, entry.extensions
-                )
-                if blacklisted_extension:
-                    return InfractionInformation(
-                        message=content,
-                        rule=self,
-                        embed_description=f"Blacklisted extension found: `{blacklisted_extension}`",
+        if not blacklist_extensions is None:
+            for entry in blacklist_extensions:
+                if channel.id in entry.channels or (len(entry.channels) < 1):
+                    blacklisted_extension = await self.is_blacklist(
+                        message_attachment_extensions, entry.extensions
                     )
+                    if blacklisted_extension:
+                        return InfractionInformation(
+                            message=content,
+                            rule=self,
+                            embed_description=f"Blacklisted extension found: `{blacklisted_extension}`",
+                        )
 
         whitelist_extensions = await self.get_whitelist_extensions(guild)
-        for entry in whitelist_extensions:
-            if channel.id in entry.channels or entry.channels is None:
-                whitelisted_extension = await self.is_whitelist(
-                    message_attachment_extensions, entry.extensions
-                )
-                if whitelisted_extension:
-                    return InfractionInformation(
-                        message=content,
-                        rule=self,
-                        embed_description=f"Extension found not in allowed whitelist: `{whitelisted_extension}`",
+        if not whitelist_extensions is None:
+            for entry in whitelist_extensions:
+                if channel.id in entry.channels or entry.channels is None:
+                    whitelisted_extension = await self.is_whitelist(
+                        message_attachment_extensions, entry.extensions
                     )
+                    if whitelisted_extension:
+                        return InfractionInformation(
+                            message=content,
+                            rule=self,
+                            embed_description=f"Extension found not in allowed whitelist: `{whitelisted_extension}`",
+                        )

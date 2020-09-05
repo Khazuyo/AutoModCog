@@ -93,7 +93,9 @@ class AutoMod(
             rule.rule_name,
             author,
             message,
-            dataclasses.asdict(is_offensive) if is_offensive else None,
+            # FixMe: This can cause an infinite recurion during a deep copy, find a
+            #        safer way to convert this!
+            None # dataclasses.asdict(is_offensive) if is_offensive else None,
         )
         log.info(
             f"{rule.rule_name} - {author} ({author.id}) - {guild} ({guild.id}) - {channel} ({channel.id})"
